@@ -26,8 +26,10 @@ public class MovieListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+
         MovieFactoryViewModel movieFactoryViewModel = Utils.provideMovieFactory();
-        mMovieListViewModel = ViewModelProviders.of(this, movieFactoryViewModel).get(MovieListViewModel.class);
+        mMovieListViewModel = ViewModelProviders.of(this, movieFactoryViewModel)
+                .get(MovieListViewModel.class);
 
         mMovieListViewModel.getMovieList().observe(this, new Observer<List<MovieResult>>() {
             @Override
@@ -35,9 +37,8 @@ public class MovieListActivity extends AppCompatActivity {
 
             }
         });
+
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -22,10 +22,13 @@ public interface MovieDao {
     @Delete
     void deleteAll(FavMovie... favMovies);
 
-    @Query("DELETE FROM movies WHERE id =:movie_id")
+    @Query("DELETE FROM movies WHERE movie_id =:movie_id")
     void deleteMovie(int movie_id);
 
-    @Query("SELECT * FROM movies WHERE id=:movie_id")
-    LiveData<FavMovie> getBook(int movie_id);
+    @Query("SELECT movie_id FROM movies WHERE movie_id=:movie_id")
+    int getBook(int movie_id);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateMovie(FavMovie movie);
 
 }
