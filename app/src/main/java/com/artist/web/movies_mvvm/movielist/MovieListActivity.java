@@ -1,17 +1,43 @@
-package com.artist.web.movies_mvvm;
+package com.artist.web.movies_mvvm.movielist;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.artist.web.movies_mvvm.MovieFactoryViewModel;
+import com.artist.web.movies_mvvm.R;
+import com.artist.web.movies_mvvm.helpers.Utils;
+import com.artist.web.movies_mvvm.model.MovieResult;
+
+import java.util.List;
+
 public class MovieListActivity extends AppCompatActivity {
+
+    private static final String TAG = MovieListActivity.class.getSimpleName();
+    RecyclerView mRecyclerView;
+    private MovieListViewModel mMovieListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+        MovieFactoryViewModel movieFactoryViewModel = Utils.provideMovieFactory();
+        mMovieListViewModel = ViewModelProviders.of(this, movieFactoryViewModel).get(MovieListViewModel.class);
+
+        mMovieListViewModel.getMovieList().observe(this, new Observer<List<MovieResult>>() {
+            @Override
+            public void onChanged(@Nullable List<MovieResult> movieResults) {
+
+            }
+        });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -38,10 +64,9 @@ public class MovieListActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-        displayResults(preference);
+        mMovieListViewModel.setMoviePreference(preference);
         return true;
     }
 
-    private void displayResults(String preference) {
-    }
+
 }
