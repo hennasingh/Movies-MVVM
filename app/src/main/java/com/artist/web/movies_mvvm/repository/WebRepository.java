@@ -1,10 +1,14 @@
 package com.artist.web.movies_mvvm.repository;
 
+import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.artist.web.movies_mvvm.MovieApplication;
+import com.artist.web.movies_mvvm.R;
 import com.artist.web.movies_mvvm.helpers.Utils;
 import com.artist.web.movies_mvvm.model.MovieApiResponse;
 import com.artist.web.movies_mvvm.model.MovieResult;
@@ -21,11 +25,20 @@ public class WebRepository {
     private static final String TAG = WebRepository.class.getSimpleName();
 
     private MutableLiveData<List<MovieResult>> mListLiveData = new MutableLiveData<>();
+    private static  MutableLiveData<String> mMoviePreference = new MutableLiveData<>();
     private WebRepository(){
 
     }
 
-    public static WebRepository getInstance() {
+    public LiveData<String> getMoviePreference(){
+        return mMoviePreference;
+    }
+    public static WebRepository getInstance(Context application) {
+        String file = application.getResources().getString(R.string.preference_file);
+        SharedPreferences sharedPref = application.getSharedPreferences(file,Context.MODE_PRIVATE);
+        String key = application.getResources().getString(R.string.preference_key);
+        String value = sharedPref.getString(key,"top_Rated");
+        mMoviePreference.setValue(value);
         if(sWebRepository == null){
             sWebRepository = new WebRepository();
         }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Movies-MVVM</string>
+    <string name="preference_file">Movie_Preference</string>
+    <string name="preference_key">preference_value</string>
 </resources>
