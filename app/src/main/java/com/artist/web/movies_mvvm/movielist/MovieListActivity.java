@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.artist.web.movies_mvvm.MovieFactoryViewModel;
 import com.artist.web.movies_mvvm.R;
 import com.artist.web.movies_mvvm.model.MovieResult;
 
@@ -19,29 +21,34 @@ import java.util.List;
 public class MovieListActivity extends AppCompatActivity {
 
     private static final String TAG = MovieListActivity.class.getSimpleName();
-    private static final String MOVIE_PREFERENCE = "movie_preference";
+    private static final String DEFAULT_PREFERENCE = "top_rated";
 
+    MovieAdapter movieAdapter;
     RecyclerView mRecyclerView;
     private MovieListViewModel mMovieListViewModel;
-    SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
-        SharedPreferences sharedPref =getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
-         mEditor = sharedPref.edit();
+        mRecyclerView = findViewById(R.id.rv_movies);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        movieAdapter = new MovieAdapter();
+        mRecyclerView.setAdapter(movieAdapter);
 
-         mMovieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
+        MovieFactoryViewModel movieFactory = new MovieFactoryViewModel(DEFAULT_PREFERENCE);
 
-        mMovieListViewModel.mMovieList.observe(this, new Observer<List<MovieResult>>() {
-            @Override
-            public void onChanged(@Nullable List<MovieResult> movieResults) {
+       mMovieListViewModel = ViewModelProviders.of(this,movieFactory).get(MovieListViewModel.class);
 
-            }
-        });
-    }
+       mMovieListViewModel.mMovieList.observe(this, new Observer<List<MovieResult>>() {
+           @Override
+           public void onChanged(@Nullable List<MovieResult> movieResults) {
+               movieAdapter.setMovies(movieResults);
+           }
+       });
+
+     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,8 +75,8 @@ public class MovieListActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-            mEditor.putString(getString(R.string.preference_key),preference);
-            mEditor.apply();
+
+        mMovieListViewModel.setmMoviePreference(preference);
         return true;
     }
 

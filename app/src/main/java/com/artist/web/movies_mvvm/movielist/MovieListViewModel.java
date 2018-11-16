@@ -14,22 +14,25 @@ import com.artist.web.movies_mvvm.repository.WebRepository;
 
 import java.util.List;
 
-public class MovieListViewModel extends AndroidViewModel {
+public class MovieListViewModel extends ViewModel {
 
-    private WebRepository mWebRepo;
+    MutableLiveData<String> mMoviePreference = new MutableLiveData<>();
 
-    public LiveData<List<MovieResult>> mMovieList = Transformations.switchMap(mWebRepo.getMoviePreference(),
+
+    public MovieListViewModel(String preference) {
+        mMoviePreference.setValue(preference);
+
+    }
+    public LiveData<List<MovieResult>> mMovieList = Transformations.switchMap(mMoviePreference,
             new Function<String, LiveData<List<MovieResult>>>() {
                 @Override
                 public LiveData<List<MovieResult>> apply(String input) {
-                    return mWebRepo.getMovieList(input);
+                    return WebRepository.getInstance().getMovieList(input);
                 }
             });
 
-    public MovieListViewModel(@NonNull Application application) {
-        super(application);
-        mWebRepo = WebRepository.getInstance(application.getApplicationContext());
+    public void setmMoviePreference(String preference){
+        mMoviePreference.setValue(preference);
     }
-
 
 }

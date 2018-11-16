@@ -30,12 +30,12 @@ public class FavMovie {
         this.movie_plot = movie_plot;
     }
 
-    public String getmMovieName() {
+    public String getMovieName() {
         return mMovieName;
     }
 
-    public void setmMovieName(String mMovieName) {
-        this.mMovieName = mMovieName;
+    public void setMovieName(String movieName) {
+        mMovieName = movieName;
     }
 
     @NonNull
@@ -61,5 +61,13 @@ public class FavMovie {
 
     public void setMovie_plot(String movie_plot) {
         this.movie_plot = movie_plot;
+    }
+
+    public String getMovie_poster() {
+        return movie_poster;
+    }
+
+    public void setMovie_poster(String movie_poster) {
+        this.movie_poster = movie_poster;
     }
 }

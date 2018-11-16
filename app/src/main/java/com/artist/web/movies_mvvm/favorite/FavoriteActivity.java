@@ -17,7 +17,5 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        MovieFactoryViewModel favFactory = Utils.provideFavModelFactory(this);
-        mFavViewModel = ViewModelProviders.of(this, favFactory).get(FavMovieViewModel.class);
     }
 }
